@@ -1,0 +1,11 @@
+---
+- name: set the tomcat home
+  lineinfile: dest=~/.bashrc regexp='<CATALINA_HOME>'
+              line="export CATALINA_HOME=/usr/local/tomcat/apache-tomcat-9.0.1"
+
+- name: set the tomcat path
+  lineinfile: dest=~/.bashrc regexp='<CATALIN_HOME>'
+              line='export PATH="$PATH:$CATALINA_HOME/bin"'
+
+- name: source bashrc
+  shell: source ~/.bashrc

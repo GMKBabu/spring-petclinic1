@@ -1,0 +1,25 @@
+---
+- name: download the java
+  get_url: url=http://download.oracle.com/otn-pub/java/jdk/8u161-b12/2f38c3b165be4555a1fa6e98c45e0808/jdk-8u161-linux-x64.tar.gz dest=/tmp/
+    
+- name: remove the older version of tomcat
+  file: path=/usr/local/tomcat state=absent  
+
+- name: download the tomcat
+  get_url: url=http://redrockdigimark.com/apachemirror/tomcat/tomcat-9/v9.0.1/bin/apache-tomcat-9.0.1.tar.gz dest=/tmp/
+ 
+- name: create a folder of tomcat
+  raw: mkdir /usr/local/tomcat state=directory
+ 
+- name: unpack the tomcat 
+  unarchive: src=/tmp/apache-tomcat-9.0.1.tar.gz dest=/usr/local/tomcat copy=no
+
+- name: copy the tomcat users
+  copy: src=tomcat-users.xml dest=/usr/local/tomcat/apache-tomcat-9.0.1/conf/ mode=777
+  notify: start the tomcat
+- name: copy the server file
+  template: src=server.xml.j2 dest=/usr/local/tomcat/apache-tomcat-9.0.1/conf/server.xml mode=777
+
+- name: copy the war file into tomcat webapp folder
+  copy: src=/var/lib/jenkins/workspace/myproject/spring-petclinic.war dest=/usr/local/tomcat/apache-tomcat-9.0.1/webapps/spring-petclinic.war mode=777
+  notify: start the tomcat

@@ -1,0 +1,3 @@
+---
+- include: configure_tomcat.yml
+- include: update_path.yml
